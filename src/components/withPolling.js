@@ -1,7 +1,9 @@
+/* eslint-disable import/prefer-default-export */
+/* eslint-disable react/destructuring-assignment */
 import * as React from 'react';
 import { connect } from 'react-redux';
 
-export const withPolling = (pollingAction, duration = 2000) => Component => {
+export const withPolling = (pollingAction, duration = 5000) => Component => {
     const Wrapper = () =>
         class extends React.Component {
             componentDidMount() {
