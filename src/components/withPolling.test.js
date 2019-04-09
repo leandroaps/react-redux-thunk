@@ -1,62 +1,62 @@
 import * as React from 'react';
 import { mount } from 'enzyme';
-import { withPolling } from './withPolling';
-import { configureStore } from './configureStore';
 import { Provider } from 'react-redux';
+import { withPolling } from './withPolling';
+import configureStore from '../store/index';
 
 jest.useFakeTimers();
 
 describe('withPolling HOC Tests', () => {
-    let store;
-    let wrapper;
+  let store;
+  let wrapper;
 
-    const TestComponent = () => <div id="test-component">Test Component</div>;
+  const TestComponent = () => <div id="test-component">Test Component</div>;
 
-    beforeEach(() => {
-        store = configureStore();
-    });
+  beforeEach(() => {
+    store = configureStore();
+  });
 
-    afterEach(() => {
-        wrapper.unmount();
-    });
+  afterEach(() => {
+    wrapper.unmount();
+  });
 
-    it('function is called on mount', () => {
-        const mockFn = jest.fn();
-        const testAction = () => () => {
-            mockFn();
-        };
+  it('function is called on mount', () => {
+    const mockFn = jest.fn();
+    const testAction = () => () => {
+      mockFn();
+    };
 
-        const WrapperComponent = withPolling(testAction)(TestComponent);
+    const WrapperComponent = withPolling(testAction)(TestComponent);
 
-        wrapper = mount(
-            <Provider store={store}>
-                <WrapperComponent />
-            </Provider>
-        );
+    wrapper = mount(
+      <Provider store={store}>
+        <WrapperComponent />
+      </Provider>
+    );
 
-        expect(wrapper.find('#test-component')).toHaveLength(1);
-        expect(mockFn.mock.calls.length).toBe(1);
-    });
+    expect(wrapper.find('#test-component')).toHaveLength(1);
+    expect(mockFn.mock.calls.length).toBe(1);
+  });
 
-    it('function is called second time after duration', () => {
-        const mockFn = jest.fn();
-        const testAction = () => () => {
-            mockFn();
-        };
+  it('function is called second time after duration', () => {
+    const mockFn = jest.fn();
+    const testAction = () => () => {
+      mockFn();
+    };
 
-        const WrapperComponent = withPolling(testAction, 1000)(TestComponent);
+    const WrapperComponent = withPolling(testAction, 1000)(TestComponent);
 
-        wrapper = mount(
-            <Provider store={store}>
-                <WrapperComponent />
-            </Provider>
-        );
+    wrapper = mount(
+      <Provider store={store}>
+        <WrapperComponent />
+      </Provider>
+    );
 
-        expect(wrapper.find('#test-component')).toHaveLength(1);
-        expect(mockFn.mock.calls.length).toBe(1);
+    expect(wrapper.find('#test-component')).toHaveLength(1);
+    expect(mockFn.mock.calls.length).toBe(1);
 
-        jest.runTimersToTime(1001);
+    jest.runTimersToTime(1001);
 
-        expect(mockFn.mock.calls.length).toBe(2);
-    });
+    expect(mockFn.mock.calls.length).toBe(2);
+  });
 });
