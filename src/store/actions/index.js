@@ -16,7 +16,7 @@ export const loadPrices = () => dispatch => {
         })
         .then(
             data => {
-                toastr.removeByType('error');
+                toastr.remove();
                 dispatch({ type: LOAD_DATA_SUCCESS, data });
             },
             error => {
